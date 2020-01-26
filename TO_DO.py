@@ -8,6 +8,11 @@ from tkinter import messagebox
 
 class To_do_list:
     def __init__(self,window):
+        try:
+           #this function only work on linux 
+           self.os_name=os.uname()
+        except:
+            self.os_name="windows"
         window.destroy()
 
         self.Todowindow=t.Tk()
@@ -33,7 +38,10 @@ class To_do_list:
         self.coder.place(x=140,y=480)
 
         try:
-            self.image=t.PhotoImage(file=self.dir+"\\image\\todo.png")
+            if(self.os_name=="windows"):
+               self.image=t.PhotoImage(file=self.dir+"\\image\\todo.png")
+            else:
+                 self.image=t.PhotoImage(file=self.dir+"/image/todo.png")
             self.label=t.Label(self.Todowindow,image=self.image).place(x=0,y=0)
         except:
              messagebox.showinfo("ERROR","image is missing ! ")
@@ -55,9 +63,15 @@ class To_do_list:
         #checking that user enter task and the y axis limit
         if(task and self.y<400):
             try:
-                self.file=open("files\\to_do_list.txt","a")
+                if(self.os_name=="windows"):
+                    self.file=open("files\\to_do_list.txt","a")
+                else:
+                    self.file=open("files/to_do_list.txt","a")
             except:
-                self.file=open("files\\to_do_list.txt","w")
+                if(self.os_name=="windows"):
+                    self.file=open("files\\to_do_list.txt","w")
+                else:
+                    self.file=open("files/to_do_list.txt","w")
             self.task[self.i]=t.Checkbutton(self.Todowindow,text=task,)
             self.task[self.i].place(x=self.x,y=self.y)
             #when user add by own we need t write it on file 
@@ -72,8 +86,10 @@ class To_do_list:
         self.file.close()
 
     def remove_task(self,event):
-        
-        self.file_w=open("files\\to_do_list.txt","w")
+        if(self.os_name=="windows"):
+           self.file_w=open("files\\to_do_list.txt","w")
+        else:
+            self.file_w=open("files/to_do_list.txt","w")
 
         #getting the completed job text 
         self.text=event.widget["text"] 
@@ -107,8 +123,10 @@ class To_do_list:
                     
     def add_to_file_a(self):
         #reading from file and add to window
-        
-        self.file=open("files\\to_do_list.txt","r")
+        if(self.os_name=="windows"):
+           self.file=open("files\\to_do_list.txt","r")
+        else:
+             self.file=open("files/to_do_list.txt","r")
         #checking is file is empty or not 
         if(len(self.file.readlines())>=1):
             self.file.seek(0)
