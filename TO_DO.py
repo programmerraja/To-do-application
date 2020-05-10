@@ -1,8 +1,8 @@
 #"to do list are sotred in files "
 #once you finished check that
 #it stored in files you can get it back lets run again
+from tkinter import Label,Entry,Checkbutton,StringVar,Tk,PhotoImage
 
-import tkinter as t
 import os
 from tkinter import messagebox
 
@@ -15,7 +15,7 @@ class To_do_list:
             self.os_name="windows"
         window.destroy()
 
-        self.Todowindow=t.Tk()
+        self.Todowindow=Tk()
         self.Todowindow.title("T0 Do List")
         self.Todowindow.geometry("500x500+400+30")
         #self.Todowindow.resizable(0,0)
@@ -28,28 +28,28 @@ class To_do_list:
         self.y=100
 
         #to store user input job in entry box
-        self.job=t.StringVar()
+        self.job=StringVar()
         
         self.dir=os.getcwd()
 
-        self.label=t.Label(self.Todowindow,text="Enter your to do list here ")
+        self.label=Label(self.Todowindow,text="Enter your to do list here ")
         self.label.place(x=100,y=100)
-        self.coder=t.Label(self.Todowindow,text="Programmer Raja ")
+        self.coder=Label(self.Todowindow,text="Programmer Raja ")
         self.coder.place(x=140,y=480)
 
         try:
             if(self.os_name=="windows"):
-               self.image=t.PhotoImage(file=self.dir+"\\image\\todo.png")
+               self.image=PhotoImage(file=os.path.join(self.dir,"image","todo.png"))
             else:
-                 self.image=t.PhotoImage(file=self.dir+"/image/todo.png")
-            self.label=t.Label(self.Todowindow,image=self.image).place(x=0,y=0)
+                 self.image=PhotoImage(file=os.path.join(self.dir,"image","todo.png"))
+            self.label=Label(self.Todowindow,image=self.image).place(x=0,y=0)
         except:
              messagebox.showinfo("ERROR","image is missing ! ")
             
 
-        self.label_job=t.Label(self.Todowindow,text="Enter Your Task Here",background="lightblue",fg="green").place(x=130,y=450)
+        self.label_job=Label(self.Todowindow,text="Enter Your Task Here",background="lightblue",fg="green").place(x=130,y=450)
 
-        self.entry=t.Entry(self.Todowindow,width=40,textvariable=self.job)
+        self.entry=Entry(self.Todowindow,width=40,textvariable=self.job)
         self.entry.place(x=130,y=470)
         
         #adding old list in file when user opening 
@@ -63,16 +63,10 @@ class To_do_list:
         #checking that user enter task and the y axis limit
         if(task and self.y<400):
             try:
-                if(self.os_name=="windows"):
-                    self.file=open("files\\to_do_list.txt","a")
-                else:
-                    self.file=open("files/to_do_list.txt","a")
+                    self.file=open(os.path.join("files","to_do_list.txt"),"a")
             except:
-                if(self.os_name=="windows"):
-                    self.file=open("files\\to_do_list.txt","w")
-                else:
-                    self.file=open("files/to_do_list.txt","w")
-            self.task[self.i]=t.Checkbutton(self.Todowindow,text=task,)
+                 self.file=open(os.path.join("files","to_do_list.txt"),"w")
+            self.task[self.i]=Checkbutton(self.Todowindow,text=task,)
             self.task[self.i].place(x=self.x,y=self.y)
             #when user add by own we need t write it on file 
             if(event!=5):
@@ -86,11 +80,8 @@ class To_do_list:
         self.file.close()
 
     def remove_task(self,event):
-        if(self.os_name=="windows"):
-           self.file_w=open("files\\to_do_list.txt","w")
-        else:
-            self.file_w=open("files/to_do_list.txt","w")
 
+        self.file_w=open(os.path.join("files","to_do_list.txt"),"w")
         #getting the completed job text 
         self.text=event.widget["text"] 
         # destroy the completed list 
@@ -123,10 +114,7 @@ class To_do_list:
                     
     def add_to_file_a(self):
         #reading from file and add to window
-        if(self.os_name=="windows"):
-           self.file=open("files\\to_do_list.txt","r")
-        else:
-             self.file=open("files/to_do_list.txt","r")
+        self.file=open(os.path.join("files","to_do_list.txt"),"r")
         #checking is file is empty or not 
         if(len(self.file.readlines())>=1):
             self.file.seek(0)
@@ -136,4 +124,4 @@ class To_do_list:
             self.file.close()
         
         
-to= To_do_list(t.Tk())
+to= To_do_list(Tk())
